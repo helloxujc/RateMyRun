@@ -1,0 +1,47 @@
+module.exports.descriptors = [
+  'Scenic',
+  'Shady',
+  'Sunny',
+  'Rocky',
+  'Rolling',
+  'Steep',
+  'Flat',
+  'Winding',
+  'Hidden',
+  'Wild',
+  'Serene',
+  'Peaceful',
+  'Challenging',
+  'Fast',
+  'Flowing',
+  'Open',
+  'Dense',
+  'Quiet',
+  'Remote',
+  'Rugged'
+];
+
+module.exports.places = [
+  'Loop',
+  'Trail',
+  'Track',
+  'Path',
+  'Run',
+  'Ridge',
+  'Valley',
+  'Canyon',
+  'Creek',
+  'River',
+  'Lakeside',
+  'Summit',
+  'Vista',
+  'Climb',
+  'Descent',
+  'Overlook',
+  'Trailhead',
+  'Sprint',
+  'Tempo',
+  'Interval',
+  'Out-and-Back'
+];
+
