@@ -30,8 +30,6 @@ module.exports.trailSchema = Joi.object({
         description: Joi.string().required().escapeHTML(),
         distanceKm: Joi.number().min(0),
         elevationGain: Joi.number().min(0),
-        surface: Joi.string().valid('road', 'trail', 'mixed'),
-        difficulty: Joi.string().valid('easy', 'moderate', 'hard'),
     }).required(),
     deleteImages: Joi.array(),
 });

@@ -1,4 +1,4 @@
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark navbar-nature">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">Rate My Run</a>
     <button
@@ -21,11 +21,11 @@
       </div>
 
       <div class="navbar-nav ml-auto">
-        <% if (!currentUser) { %>
+        <% if (!locals.currentUser) { %>
           <a class="nav-link" href="/login">Login</a>
           <a class="nav-link" href="/register">Register</a>
         <% } else { %>
-          <span class="nav-link disabled">Hi, <%= currentUser.username %>!</span>
+          <span class="nav-link disabled">Hi, <%= locals.currentUser.username %>!</span>
           <a class="nav-link" href="/logout">Logout</a>
         <% } %>
       </div>

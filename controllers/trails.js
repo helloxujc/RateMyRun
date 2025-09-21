@@ -1,0 +1,86 @@
+
+const Trail = require('../models/trail');
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
+const { cloudinary } = require('../cloudinary');
+
+
+module.exports.index = async (req, res) => {
+  const trails = await Trail.find({});
+  res.render('trails/index', { trails });
+};
+
+module.exports.renderNewForm = (req, res) => {
+  res.render('trails/new');
+};
+
+module.exports.createTrail = async (req, res, next) => {
+  const geoData = await geocoder
+    .forwardGeocode({
+      query: req.body.trail.location,
+      limit: 1,
+    })
+    .send();
+
+  const trail = new Trail(req.body.trail);
+  trail.geometry = geoData.body.features[0]?.geometry; 
+  trail.images = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+  trail.author = req.user._id;
+
+  await trail.save();
+  req.flash('success', 'New trail created!');
+  res.redirect(`/trails/${trail._id}`);
+};
+
+module.exports.showTrail = async (req, res) => {
+  const trail = await Trail.findById(req.params.id)
+    .populate({
+      path: 'reviews',
+      populate: { path: 'author' },
+    })
+    .populate('author');
+
+  if (!trail) {
+    req.flash('error', 'Cannot find that trail.');
+    return res.redirect('/trails');
+  }
+  res.render('trails/show', { trail });
+};
+
+module.exports.renderEditForm = async (req, res) => {
+  const { id } = req.params;
+  const trail = await Trail.findById(id);
+  if (!trail) {
+    req.flash('error', 'Cannot find that trail.');
+    return res.redirect('/trails');
+  }
+  res.render('trails/edit', { trail });
+};
+
+module.exports.updateTrail = async (req, res) => {
+  const { id } = req.params;
+
+  const trail = await Trail.findByIdAndUpdate(id, { ...req.body.trail }, { new: true });
+
+  const imgs = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+  trail.images.push(...imgs);
+  await trail.save();
+
+  if (req.body.deleteImages && req.body.deleteImages.length) {
+    for (let filename of req.body.deleteImages) {
+      await cloudinary.uploader.destroy(filename);
+    }
+    await trail.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } });
+  }
+
+  req.flash('success', 'Trail has been updated.');
+  res.redirect(`/trails/${trail._id}`);
+};
+
+module.exports.deleteTrail = async (req, res) => {
+  const { id } = req.params;
+  await Trail.findByIdAndDelete(id);
+  req.flash('success', 'Trail has been deleted.');
+  res.redirect('/trails');
+};

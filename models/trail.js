@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const Review = require('./review');
+const Review = require('./review');
 const Schema = mongoose.Schema;
 
 const ImageSchema = new Schema({
@@ -32,8 +32,6 @@ const TrailSchema = new Schema({
 
     distanceKm: { type: Number, min: 0 },
     elevationGain: { type: Number, min: 0 },
-    surface: { type: String, enum: ['road', 'trail', 'mixed'] },
-    difficulty: { type: String, enum: ['easy', 'moderate', 'hard'] },
 
     author: {
         type: Schema.Types.ObjectId,
