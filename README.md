@@ -24,8 +24,8 @@ It allows users to explore trails on an interactive map, upload photos, and shar
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/helloxujc/rate-my-run.git
-   cd rate-my-run
+   git clone https://github.com/helloxujc/RateMyRun.git
+   cd RateMyRun
    ```
 
 2. **Install dependencies**
